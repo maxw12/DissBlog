@@ -107,14 +107,16 @@ class AddSubmissionView(LoginRequiredMixin, generic.CreateView):
     redirect_field_name = 'login'
 
     def form_valid(self, form):
-        # form.file = self.request.FILES
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-    # def get_form(self, form_class=SubmissionForm):
-    #     """Return an instance of the form to be used in this view."""
-    #     return form_class(**self.get_form_kwargs())
-
+# def upload_file(request):
+#     if request.POST:
+#         form = SubmissionForm(request.POST, request.FILES)
+#         print(request.POST['file'])
+#         if form.is_valid()
+#             form.save()
+#             return HttpResponseRedirect()
 
 class DeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Submission
