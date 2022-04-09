@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Dissertation Blog</h1>
+
+<select name="tag" form="filterForm">
+    {% for tag in courses %}
+        {% if tag.id == selected_tag %}
+            <option value={{ tag.id }} selected="selected">{{ tag.name }}</option>
+        {% else %}
+            <option value={{ tag.id }}>{{ tag.name }}</option>
+        {% endif %}
+
+    {% endfor %}
+</select>
+ <form method="get" id="filterForm">
+     {% csrf_token %}
+{#    <p>tag: <input type="text" value="tag" name=tag></p>#}
+    <button class="btn btn-dark">Filter</button>
+ </form>
+
+{% for submission in submission_list %}
+
+    <h1>{{ submission.title }}</h1>
+    {{ submission.author }} - {{ submission.pub_date }}
+    <br/>
+    <p>{{ submission.content }}</p>
+    <a href="{% url 'submission-detail' submission.pk %}" class="btn btn-dark">Continue Reading</a>
+    <br/><br/>
+{% endfor %}
+
+{% endblock %}

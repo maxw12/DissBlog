@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    DisscoverBlog . Register
+{% endblock %}
+{% block content %}
+
+<h1 xmlns="http://www.w3.org/1999/html">Register</h1>
+<div class="form-group">
+    <form method="post">
+        {% csrf_token %}
+    {#    create a private key encryption to prevent attacks#}
+    {#    as_p stands for <p></p> as such it will put it into a new paragraph every line#}
+        {{ form.as_p }}
+        <button class="btn btn-dark">Register</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    DisscoverBlog . {{ submission.title }}
+{% endblock %}
+
+{% block content %}
+
+    <h1>{{ submission.title }}</h1>
+    <small>By: {{ submission.author }} - {{ submission.pub_date }} - {{ submission.tag }}</small>
+    <hr>
+
+    <p>{{ submission.content }}</p>
+
+{#    {% for f in submission.file %}#}
+{#        <a href="/blogtest/media/{{ f }}">View File</a>#}
+{#    {% endfor %}#}
+    <a href="/media/{{ submission.file }}">{{ submission.file }}</a>
+
+    <br/><br/>
+    <form action="{% url 'like_post' submission.pk%}" method="post">
+        {% csrf_token %}
+
+        {% if liked %}
+            <button type="submit" name="submission_id" value="{{ submission.id }}" class="btn btn-danger">Unlike</button>
+        {% else %}
+            <button type="submit" name="submission_id" value="{{ submission.id }}" class="btn btn-light">Like</button>
+        {% endif %}
+         - {{ likes_total }} Likes
+    </form>
+    <br/>
+    <a href="javascript:history.back()" class="btn btn-dark">Go Back</a>
+
+    {% if user.id == submission.author.id %}
+        <a href="{% url 'delete_submission' submission.pk %}" class="btn btn-dark">Delete Submission</a>
+    {% endif %}
+
+    <br/><br/>
+    <h3>Comments:</h3>
+
+    {% if not submission.comments.all %}
+        No Comments Yet.
+    {% else %}
+        {% for comment in submission.comments.all %}
+            <strong>{{ comment.comment_by }} - {{ comment.pub_date }}</strong><br/>
+            {{ comment.content }}<br>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.name }}
+        <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}" id="id_content"
+            name="content" >{{ form.content.value|default:'' }}</textarea>
+        <button type="submit" class="btn btn-dark">Submit</button>
+    </form>
+
+
+{% endblock %}
