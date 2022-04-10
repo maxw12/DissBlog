@@ -12,6 +12,7 @@
     {#    as_p stands for <p></p> as such it will put it into a new paragraph every line#}
         {{ form.as_p }}
         <button class="btn btn-dark">Register</button>
+        Already a user? <a href="{% url 'login' %}">Login</a>
     </form>
 </div>
 {% endblock %}

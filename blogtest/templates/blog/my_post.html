@@ -6,12 +6,18 @@
 
     {% for submission in submission_list %}
         {% if user.id == submission.author.id %}
-            <h1>{{ submission.title }}</h1>
-            {{ submission.author }} - {{ submission.pub_date }}
-            <br/>
-            <p>{{ submission.content }}</p>
-            <a href="{% url 'submission-detail' submission.pk %}" class="btn btn-dark">Continue Reading</a>
-            <br/><br/>
+        <div style="padding:1rem;">
+            <div class="card" style="width: auto;">
+                <div class="card-header">
+                    <h1>{{ submission.title }}</h1>
+                    {{ submission.author }} - {{ submission.pub_date }}
+                </div>
+                <div class="card-body">
+                    <p>{{ submission.content }}</p>
+                    <a href="{% url 'submission-detail' submission.pk %}" class="btn btn-dark">Continue Reading</a>
+                </div>
+            </div>
+        </div>
         {% endif %}
     {% endfor %}
 

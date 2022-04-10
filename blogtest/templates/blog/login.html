@@ -5,15 +5,18 @@
 {% block content %}
 
 <h1 xmlns="http://www.w3.org/1999/html">Welcome to DissBlog</h1>
-<br/>
-<h3 xmlns="http://www.w3.org/1999/html">Please enter login details</h3>
-<div class="form-group">
+    <p>Start sharing your dissertation today!</p>
+<h5 xmlns="http://www.w3.org/1999/html">Please enter login details</h5>
+<div class="card">
     <form method="post">
+        <div class="mb3">
         {% csrf_token %}
     {#    create a private key encryption to prevent attacks#}
     {#    as_p stands for <p></p> as such it will put it into a new paragraph every line#}
         {{ form.as_p }}
+        </div>
         <button class="btn btn-dark">Login</button>
+        Not yet a user? <a href="{% url 'register' %}">Register</a>
     </form>
 </div>
 {% endblock %}
