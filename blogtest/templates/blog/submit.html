@@ -6,7 +6,7 @@
 
     <h1 xmlns="http://www.w3.org/1999/html">Add a Submission</h1>
     <div class="form-group">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
         {#    create a private key encryption to prevent attacks#}
         {#    as_p stands for <p></p> as such it will put it into a new paragraph every line#}

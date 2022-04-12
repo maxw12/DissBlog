@@ -60,6 +60,12 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
         context["likes_total"] = likes_total
         context["liked"] = liked
         context["comments"] = comments
+        if self.request.GET.get('previous_page'):
+            context["previous_page"] = self.request.GET.get('previous_page')
+        else:
+            context["previous_page"] = self.request.META.get('HTTP_REFERER')
+        if not context["previous_page"]:
+            context["previous_page"] = reverse_lazy('home')
         return context
 
     def post(self, request, *args, **kwargs):
@@ -67,36 +73,13 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
         post = Submission.objects.filter(id=self.kwargs['pk'])[0]
         comment_by = request.user
         content = request.POST['content']
+        if not content or content == "":
+            context = self.get_context_data(*args, **kwargs)
+            return self.render_to_response(context=context)
         comment = Comment.objects.create(comment_by=comment_by, content=content, post=post)
         comment.save()
         context = self.get_context_data(*args, **kwargs)
         return self.render_to_response(context=context)
-
-
-        # post = get_object_or_404(Submission, pk=pk)  # request.POST.get('submission_id')
-        #
-        # comments = post.comments.filter(status=True)
-        # user_comment = None
-        # if request.method == 'POST':
-        #     comment_form = NewCommentForm(request.POST)
-        #     if comment_form.is_valid():
-        #         user_comment = comment_form.save(commit=False)
-        #         user_comment.post = post
-        #         user_comment.save()
-        #         return HttpResponseRedirect('/' + post.pk)
-        # else:
-        #     comment_form = NewCommentForm()
-        # return render(request, 'blog/submission_detail.html',
-        #               {'post': post, 'comment': user_comment, 'comments': comments, 'comment_form': comment_form})
-    #     comment = request.POST['comment']
-    #     comments = Comment.objects.create(
-    #         content=comment,
-    #         commented_on=post,
-    #         commented_by=request.user
-    #     )
-    #     return HttpResponseRedirect('submission-detail', pk=post.pk)
-    #
-    # return render(request, 'blog/submission_detail.html', {'comments': comments})
 
 
 class AddSubmissionView(LoginRequiredMixin, generic.CreateView):
@@ -110,13 +93,6 @@ class AddSubmissionView(LoginRequiredMixin, generic.CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-# def upload_file(request):
-#     if request.POST:
-#         form = SubmissionForm(request.POST, request.FILES)
-#         print(request.POST['file'])
-#         if form.is_valid()
-#             form.save()
-#             return HttpResponseRedirect()
 
 class DeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Submission
@@ -147,7 +123,7 @@ def LikeView(request, pk):
     else:
         post.likes.add(request.user)
         liked = True
-    return HttpResponseRedirect(reverse('submission-detail', args=[str(pk)]))
+    return HttpResponseRedirect(reverse('submission-detail', args=[str(pk)])+"?previous_page="+request.GET.get('previous_page'))
 
 
 class LoginView(FormView):

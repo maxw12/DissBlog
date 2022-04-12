@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
+
 {% block page_title %}
     DisscoverBlog . {{ submission.title }}
 {% endblock %}
 
 {% block content %}
-
     <h1>{{ submission.title }}</h1>
     <small>By: {{ submission.author }} - {{ submission.pub_date }} - {{ submission.tag }}</small>
     <hr>
@@ -17,7 +17,7 @@
     <a href="/media/{{ submission.file }}">{{ submission.file }}</a>
 
     <br/><br/>
-    <form action="{% url 'like_post' submission.pk%}" method="post">
+    <form action="{% url 'like_post' submission.pk%}?previous_page={{ previous_page }}" method="post">
         {% csrf_token %}
 
         {% if liked %}
@@ -28,7 +28,7 @@
          - {{ likes_total }} Likes
     </form>
     <br/>
-    <a href="javascript:history.back()" class="btn btn-dark">Go Back</a>
+    <a href="{{ previous_page }}" class="btn btn-dark">Go Back</a>
 
     {% if user.id == submission.author.id %}
         <a href="{% url 'delete_submission' submission.pk %}" class="btn btn-dark">Delete Submission</a>
@@ -49,6 +49,9 @@
     <form method="post">
         {% csrf_token %}
         {{ form.name }}
+        {% if empty_comment %}
+            <div style="color:red">comment cannot be empty</div>
+        {% endif %}
         <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}" id="id_content"
             name="content" >{{ form.content.value|default:'' }}</textarea>
         <button type="submit" class="btn btn-dark">Submit</button>

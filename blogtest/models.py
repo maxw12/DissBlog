@@ -54,7 +54,7 @@ class Submission(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(Submission, related_name="comments", on_delete=models.CASCADE)
     comment_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.TextField(blank=False, null=False)
     pub_date = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=True)
 

@@ -4,6 +4,9 @@ from django.core.exceptions import ValidationError
 
 from .models import Submission, Course, User, Comment
 
+# debug
+import sys
+
 course = Course()
 
 
@@ -11,12 +14,11 @@ class SubmissionForm(forms.ModelForm):
     class Meta:
         model = Submission
         fields = ('title', 'tag', 'file', 'content')
-
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'please enter name of title here'}),
             'tag': forms.Select(choices=course.name, attrs={'class': 'form-control'}),
-            'file': forms.FileInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
+            'file': forms.FileInput(attrs={'class': 'form-control'}),
         }
 
 
@@ -24,6 +26,10 @@ class CreateUserForm(UserCreationForm):
     """
     Form to take information to do with django base user model.
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for key in self.fields:
+            self.fields[key].help_text = ""
 
     class Meta:
         model = User
@@ -43,7 +49,7 @@ class NewCommentForm(forms.ModelForm):
         fields = ("comment_by", "content",)
         widgets = {
             "comment_by": forms.Textarea(attrs={'class': 'form-control'}),
-            "content": forms.Textarea(attrs={'class': 'form-control'})
+            "content": forms.Textarea(attrs={'required': True, 'class': 'form-control'})
         }
 
 
