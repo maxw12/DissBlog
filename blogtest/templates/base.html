@@ -37,7 +37,7 @@
                   <li class="nav-item">
                       <a class="nav-link" href="{% url 'my_post' %}">My Submissions</a>
                   </li>
-                  <form class="d-flex" method="POST" action="{% url 'search' %}">
+                  <form class="d-flex" method="GET" action="{% url 'search' %}">
                       {% csrf_token %}
                       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
                       <button class="btn btn-outline-dark" type="submit">Search</button>

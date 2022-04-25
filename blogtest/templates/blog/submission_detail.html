@@ -40,9 +40,14 @@
     {% if not submission.comments.all %}
         No Comments Yet.
     {% else %}
-        {% for comment in submission.comments.all %}
-            <strong>{{ comment.comment_by }} - {{ comment.pub_date }}</strong><br/>
-            {{ comment.content }}<br>
+        {% for comment in comments %}
+            <strong>
+                {{ comment.comment_by }} - {{ comment.pub_date }}
+                {% if comment.comment_by.type == 3 %}
+                    *
+                {% endif %}
+            </strong><br/>
+            <div>{{ comment.content }}</div><br>
         {% endfor %}
     {% endif %}
 

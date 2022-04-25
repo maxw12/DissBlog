@@ -24,13 +24,21 @@ class HomeView(LoginRequiredMixin, generic.ListView):
         context['courses'] = Course.objects.all()
         if self.request.GET.get('tag'):
             context['selected_tag'] = int(self.request.GET.get('tag'))
+        if self.request.GET.get('query'):
+            context['current_query'] = self.request.GET.get('query')
         return context
 
     def get_queryset(self):
         tag_filter = self.request.GET.get('tag')
+        query_filter = self.request.GET.get('query')
+        result_sets = None
+        if query_filter:
+            result_sets = Submission.objects.filter(title__contains=query_filter)
+        else:
+            result_sets = Submission.objects.all()
         if not tag_filter:
-            return Submission.objects.all().order_by(*self.ordering)
-        context = Submission.objects.filter(tag=tag_filter).order_by(*self.ordering)
+            return result_sets.order_by(*self.ordering)
+        context = result_sets.filter(tag=tag_filter).order_by(*self.ordering)
         return context
 
 
@@ -51,7 +59,7 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         post = Submission.objects.filter(id=self.kwargs['pk'])[0]
-        comments = Comment.objects.filter(post_id=self.kwargs['pk'])
+        comments = Comment.objects.filter(post_id=self.kwargs['pk']).order_by("-comment_by__type", "pub_date")
         liked = False
         if post.likes.filter(id=self.request.user.id).exists():
             liked = True

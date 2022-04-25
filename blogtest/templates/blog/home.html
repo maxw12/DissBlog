@@ -7,6 +7,7 @@
     <div class="card-header" style="width: auto;">
         Filter by Course:
         <select name="tag" form="filterForm" class="form-select form-select-sm" style="width: fit-content">
+            <option value=''> ------ </option>
             {% for tag in courses %}
                 {% if tag.id == selected_tag %}
                     <option value={{ tag.id }} selected="selected">{{ tag.name }}</option>
@@ -17,6 +18,9 @@
         </select>
         <form method="get" id="filterForm">
             {% csrf_token %}
+            {% if current_query %}
+                <input type="hidden" name="query" value={{ current_query }}>
+            {% endif %}
             <button class="btn btn-dark">Filter</button>
         </form>
     </div>

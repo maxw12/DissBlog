@@ -26,5 +26,5 @@ urlpatterns = [
     path('like/<int:pk>', views.LikeView, name='like_post'),
     # path('comment/<int:pk>', views.AddComment, name='comment')
 
-    path('search/', views.search, name='search'),
+    path('search', views.HomeView.as_view(), name='search'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
