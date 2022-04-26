@@ -4,9 +4,6 @@ from django.core.exceptions import ValidationError
 
 from .models import Submission, Course, User, Comment
 
-# debug
-import sys
-
 course = Course()
 
 

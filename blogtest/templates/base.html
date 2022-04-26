@@ -32,23 +32,16 @@
                       <a class="nav-link" href="{% url 'submit' %}">Add Submission</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                      <a class="nav-link" href="{% url 'my_post' %}">My Submissions</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="{% url 'my_post' %}">My Submissions</a>
+                      <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                   </li>
                   <form class="d-flex" method="GET" action="{% url 'search' %}">
                       {% csrf_token %}
                       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
                       <button class="btn btn-outline-dark" type="submit">Search</button>
                   </form>
-{#              {% else %}#}
-{#                  <li class="nav-item">#}
-{#                      <a class="nav-link" href="{% url 'register' %}">Register</a>#}
-{#                  </li>#}
-{#                  <li class="nav-item">#}
-{#                      <a class="nav-link" href="{% url 'login' %}">Login</a>#}
-{#                  </li>#}
               {% endif %}
 
           </ul>

@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 
+{% block page_title %}
+    DisscoverBlog . Search
+{% endblock %}
+
 {% block content %}
 
     <h1>Results for ....</h1>
 
     {% for submission in submission_list %}
-
 
         {% if user.id == submission.author.id %}
             <h1>{{ submission.title }}</h1>

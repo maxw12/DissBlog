@@ -154,28 +154,3 @@ class LoginView(FormView):
             messages.add_message(self.request, messages.INFO, 'Wrong credentials\
                                 please try again')
             return HttpResponseRedirect(reverse_lazy('login'))
-
-
-def CategoryView(request, cat):
-    return render(request, 'categories.html')
-
-
-def search(request):
-    if request.method == 'POST':
-        query = request.GET.get('query', '')
-
-        if len(query) > 0:
-            posts = Submission.objects.filter(title__contains=query)
-            topics = Course.objects.filter(title__contains=query)
-        else:
-            posts = []
-            topics = []
-
-        context = {
-            'query': query,
-            'posts': posts,
-            'topics': topics,
-            'title': 'Search',
-        }
-        return render(request, 'blog/search.html', context)
-

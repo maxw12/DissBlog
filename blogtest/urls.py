@@ -15,8 +15,7 @@ urlpatterns = [
     # submit
     path('submit/', views.AddSubmissionView.as_view(), name='submit'),
 
-    path('category/<str:cat>/', views.CategoryView, name='category'),
-
+    # authentication
     path('login/', views.LoginView.as_view(), name='login'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('logout/', views.Logout, name='logout'),
@@ -24,7 +23,6 @@ urlpatterns = [
     path('mysubmission/', views.MyPostView.as_view(), name='my_post'),
 
     path('like/<int:pk>', views.LikeView, name='like_post'),
-    # path('comment/<int:pk>', views.AddComment, name='comment')
 
     path('search', views.HomeView.as_view(), name='search'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -16,7 +16,6 @@ class User(AbstractUser):
         (STUDENT, _('Student')),
         (STAFF, _('Staff')),
     )
-    # user_id = models.AutoField(primary_key=True, default=1)
     type = models.PositiveSmallIntegerField(choices=TYPE, default=STUDENT)
     date_of_birth = models.DateField(_('date_of_birth'), default=timezone.now)
 
@@ -48,7 +47,6 @@ class Submission(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
-        # return reverse('submission-detail', args=(str(self.id)))
 
 
 class Comment(models.Model):

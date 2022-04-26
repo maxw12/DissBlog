@@ -33,7 +33,7 @@
                     {{ submission.author }} - {{ submission.pub_date }}
                 </div>
                 <div class="card-body">
-                    <p>{{ submission.content }}</p>
+                    <p>{{ submission.content|slice:":250"|safe }}......</p>
                     <a href="{% url 'submission-detail' submission.pk %}" class="btn btn-dark">Continue Reading</a>
                 </div>
             </div>

@@ -9,11 +9,11 @@
     <small>By: {{ submission.author }} - {{ submission.pub_date }} - {{ submission.tag }}</small>
     <hr>
 
-    <p>{{ submission.content }}</p>
+    <div>
+        <h5>Abstract:</h5>
+        <p>{{ submission.content }}</p>
+    </div>
 
-{#    {% for f in submission.file %}#}
-{#        <a href="/blogtest/media/{{ f }}">View File</a>#}
-{#    {% endfor %}#}
     <a href="/media/{{ submission.file }}">{{ submission.file }}</a>
 
     <br/><br/>
