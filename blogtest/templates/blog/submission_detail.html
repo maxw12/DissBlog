@@ -15,18 +15,20 @@
     </div>
 
     <a href="/media/{{ submission.file }}">{{ submission.file }}</a>
-
     <br/><br/>
-    <form action="{% url 'like_post' submission.pk%}?previous_page={{ previous_page }}" method="post">
-        {% csrf_token %}
 
-        {% if liked %}
-            <button type="submit" name="submission_id" value="{{ submission.id }}" class="btn btn-danger">Unlike</button>
-        {% else %}
-            <button type="submit" name="submission_id" value="{{ submission.id }}" class="btn btn-light">Like</button>
-        {% endif %}
-         - {{ likes_total }} Likes
-    </form>
+    {% if user.is_authenticated %}
+        <form action="{% url 'like_post' submission.pk%}?previous_page={{ previous_page }}" method="post">
+            {% csrf_token %}
+
+            {% if liked %}
+                <button type="submit" name="submission_id" value="{{ submission.id }}" class="btn btn-danger">Unlike</button>
+            {% else %}
+                <button type="submit" name="submission_id" value="{{ submission.id }}" class="btn btn-light">Like</button>
+            {% endif %}
+             - {{ likes_total }} Likes
+        </form>
+    {% endif %}
     <br/>
     <a href="{{ previous_page }}" class="btn btn-dark">Go Back</a>
 
@@ -34,33 +36,36 @@
         <a href="{% url 'delete_submission' submission.pk %}" class="btn btn-dark">Delete Submission</a>
     {% endif %}
 
-    <br/><br/>
-    <h3>Comments:</h3>
+{#    if user is logged in #}
+    {% if user.is_authenticated %}
+        <br/><br/>
+        <h3>Comments:</h3>
 
-    {% if not submission.comments.all %}
-        No Comments Yet.
-    {% else %}
-        {% for comment in comments %}
-            <strong>
-                {{ comment.comment_by }} - {{ comment.pub_date }}
-                {% if comment.comment_by.type == 3 %}
-                    *
-                {% endif %}
-            </strong><br/>
-            <div>{{ comment.content }}</div><br>
-        {% endfor %}
-    {% endif %}
-
-    <form method="post">
-        {% csrf_token %}
-        {{ form.name }}
-        {% if empty_comment %}
-            <div style="color:red">comment cannot be empty</div>
+        {% if not submission.comments.all %}
+            No Comments Yet.
+        {% else %}
+            {% for comment in comments %}
+                <strong>
+                    {{ comment.comment_by }} - {{ comment.pub_date }}
+                    {% if comment.comment_by.type == 3 %}
+                        *
+                    {% endif %}
+                </strong><br/>
+                <div>{{ comment.content }}</div><br>
+            {% endfor %}
         {% endif %}
-        <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}" id="id_content"
-            name="content" >{{ form.content.value|default:'' }}</textarea>
-        <button type="submit" class="btn btn-dark">Submit</button>
-    </form>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.name }}
+            {% if empty_comment %}
+                <div style="color:red">comment cannot be empty</div>
+            {% endif %}
+            <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}" id="id_content"
+                name="content" >{{ form.content.value|default:'' }}</textarea>
+            <button type="submit" class="btn btn-dark">Submit</button>
+        </form>
+    {% endif %}
 
 
 {% endblock %}

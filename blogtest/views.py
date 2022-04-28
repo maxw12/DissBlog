@@ -12,11 +12,11 @@ from .forms import SubmissionForm, CreateUserForm, LoginUser, NewCommentForm
 
 
 # # Create your views here.
-class HomeView(LoginRequiredMixin, generic.ListView):
+class HomeView(generic.ListView):
     model = Submission
     template_name = 'blog/home.html'
-    login_url = 'login'
-    redirect_field_name = 'login'
+    # login_url = 'login'
+    # redirect_field_name = 'login'
     ordering = ['-pub_date']
 
     def get_context_data(self, **kwargs):
@@ -50,12 +50,12 @@ class MyPostView(LoginRequiredMixin, generic.ListView):
     redirect_field_name = 'login'
 
 
-class DetailView(LoginRequiredMixin, generic.DetailView):
+class DetailView(generic.DetailView):
     model = Submission
     form_class = NewCommentForm
     template_name = 'blog/submission_detail.html'
-    login_url = 'login'
-    redirect_field_name = 'login'
+    # login_url = 'login'
+    # redirect_field_name = 'login'
 
     def get_context_data(self, *args, **kwargs):
         post = Submission.objects.filter(id=self.kwargs['pk'])[0]
@@ -119,7 +119,7 @@ class RegisterView(generic.CreateView):
 def Logout(request):
     """logout logged in user"""
     logout(request)
-    return HttpResponseRedirect(reverse_lazy('login'))
+    return HttpResponseRedirect(reverse_lazy('home'))
 
 
 def LikeView(request, pk):

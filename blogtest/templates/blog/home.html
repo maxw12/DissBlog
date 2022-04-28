@@ -2,7 +2,14 @@
 
 {% block content %}
 
-<h1>Dissertation Blog</h1>
+<h1>Welcome to Dissertation Blog</h1>
+
+    {% if user.is_authenticated %}
+
+    {% else %}
+        You are not logged in. Please login to get full access...
+        <br/><br/>
+    {% endif %}
 
     <div class="card-header" style="width: auto;">
         Filter by Course:
