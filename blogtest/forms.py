@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+from setuptools._entry_points import _
 
 from .models import Submission, Course, User, Comment
 
@@ -16,6 +17,9 @@ class SubmissionForm(forms.ModelForm):
             'tag': forms.Select(choices=course.name, attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
             'file': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'content': 'Abstract',
         }
 
 
