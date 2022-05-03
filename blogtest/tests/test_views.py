@@ -24,15 +24,15 @@ class TestCallsCore(TestCase):
         # checking for get
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, '#core/login.html')
+        self.assertTemplateUsed(response, 'blog/login.html')
         # checking for post request
-        response_post = self.client.post(reverse('login'), {'username': 'test', 'password': 'test'})
+        response_post = self.client.post(reverse('login'), {'username': 'hw578', 'password': 'ExeterUni19'})
         self.assertEqual(response_post.status_code, 302)
         self.assertRedirects(response_post, '/')
         # checking for post request with invalid info
-        response_post_invalid = self.client.post(reverse('login'), {'username': 'test', 'password': 'invalid'})
+        response_post_invalid = self.client.post(reverse('login'), {'username': 'hw578', 'password': 'invalid'})
         self.assertEqual(response_post_invalid.status_code, 302)
-        self.assertRedirects(response_post_invalid, '/')
+        self.assertRedirects(response_post_invalid, '/login/')
 
     def test_call_register(self):
         """
@@ -42,8 +42,8 @@ class TestCallsCore(TestCase):
         # checking for get
         response = self.client.get(reverse('register'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'core/register.html')
+        self.assertTemplateUsed(response, 'blog/register.html')
         # checking for post
         response_post = self.client.post(reverse('register'), {'username': 'test', 'password': 'test'})
         self.assertEqual(response_post.status_code, 200)
-        self.assertTemplateUsed(response_post, 'core/register.html')
+        self.assertTemplateUsed(response_post, 'blog/register.html')

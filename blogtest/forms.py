@@ -9,6 +9,9 @@ course = Course()
 
 
 class SubmissionForm(forms.ModelForm):
+    """
+    Form for submitting a post
+    """
     class Meta:
         model = Submission
         fields = ('title', 'tag', 'file', 'content')
@@ -40,11 +43,17 @@ class CreateUserForm(UserCreationForm):
 
 
 class LoginUser(forms.Form):
+    """
+    Form to log user in
+    """
     username = forms.CharField(max_length=255)
     password = forms.CharField(widget=forms.PasswordInput())
 
 
 class NewCommentForm(forms.ModelForm):
+    """
+    Form for adding comment
+    """
     class Meta:
         model = Comment
         fields = ("comment_by", "content",)

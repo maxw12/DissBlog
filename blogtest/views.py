@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.views.generic import FormView
@@ -11,15 +11,19 @@ from .models import Submission, User, Comment, Course
 from .forms import SubmissionForm, CreateUserForm, LoginUser, NewCommentForm
 
 
-# # Create your views here.
 class HomeView(generic.ListView):
+    """
+    This class renders the Home page as a list, with extra functions to
+    render extra context
+    """
     model = Submission
     template_name = 'blog/home.html'
-    # login_url = 'login'
-    # redirect_field_name = 'login'
     ordering = ['-pub_date']
 
     def get_context_data(self, **kwargs):
+        """
+        function to render filtered tag and search query as extra context
+        """
         context = super(HomeView, self).get_context_data(**kwargs)
         context['courses'] = Course.objects.all()
         if self.request.GET.get('tag'):
@@ -29,6 +33,9 @@ class HomeView(generic.ListView):
         return context
 
     def get_queryset(self):
+        """
+        function to filter submissions according to tag value and search query
+        """
         tag_filter = self.request.GET.get('tag')
         query_filter = self.request.GET.get('query')
         result_sets = None
@@ -43,6 +50,9 @@ class HomeView(generic.ListView):
 
 
 class MyPostView(LoginRequiredMixin, generic.ListView):
+    """
+    This class display list of user posts
+    """
     model = Submission
     template_name = 'blog/my_post.html'
     ordering = ['-pub_date']
@@ -51,13 +61,17 @@ class MyPostView(LoginRequiredMixin, generic.ListView):
 
 
 class DetailView(generic.DetailView):
+    """
+    This class renders detail view of submission
+    """
     model = Submission
     form_class = NewCommentForm
     template_name = 'blog/submission_detail.html'
-    # login_url = 'login'
-    # redirect_field_name = 'login'
 
     def get_context_data(self, *args, **kwargs):
+        """
+        This function renders likes and comments as extra context on detail page
+        """
         post = Submission.objects.filter(id=self.kwargs['pk'])[0]
         comments = Comment.objects.filter(post_id=self.kwargs['pk']).order_by("-comment_by__type", "pub_date")
         liked = False
@@ -77,6 +91,9 @@ class DetailView(generic.DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
+        """
+        This function posts user comments to Comment table in database
+        """
         self.object = self.get_object()
         post = Submission.objects.filter(id=self.kwargs['pk'])[0]
         comment_by = request.user
@@ -91,6 +108,9 @@ class DetailView(generic.DetailView):
 
 
 class AddSubmissionView(LoginRequiredMixin, generic.CreateView):
+    """
+    This class renders Submission form for adding a post
+    """
     model = Submission
     template_name = 'blog/submit.html'
     form_class = SubmissionForm
@@ -103,6 +123,9 @@ class AddSubmissionView(LoginRequiredMixin, generic.CreateView):
 
 
 class DeleteView(LoginRequiredMixin, generic.DeleteView):
+    """
+    This class display Delete view
+    """
     model = Submission
     template_name = 'blog/delete_submission.html'
     success_url = reverse_lazy('home')
@@ -111,6 +134,9 @@ class DeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class RegisterView(generic.CreateView):
+    """
+    This class display register form
+    """
     form_class = CreateUserForm
     template_name = 'blog/register.html'
     success_url = reverse_lazy('login')
@@ -123,6 +149,13 @@ def Logout(request):
 
 
 def LikeView(request, pk):
+    """
+    This function check if user had liked a post once the like button is pressed
+    if not, add them to the like attribute in database
+    :param request:
+    :param pk:
+    :return:
+    """
     post = get_object_or_404(Submission, id=request.POST.get('submission_id'))
     liked = False
     if post.likes.filter(id=request.user.id).exists():
@@ -135,12 +168,17 @@ def LikeView(request, pk):
 
 
 class LoginView(FormView):
+    """
+    This class displays login user form
+    """
     form_class = LoginUser
     template_name = 'blog/login.html'
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        """ process user login"""
+        """
+        This function process user login by authenticating credentials
+        """
         credentials = form.cleaned_data
 
         user = authenticate(username=credentials['username'],

@@ -1,13 +1,17 @@
 from django.utils import timezone
 from django.db import models
-# from django.utils. import User
 from django.urls import reverse
-from datetime import datetime, date
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
+    """
+    This class stores user attribute detail in the User table in the database
+
+    A User instance represents a user that can have certain permissions depending whether
+    they're a student, academic or admin
+    """
     ADMIN = 1
     STUDENT = 2
     STAFF = 3
@@ -21,6 +25,9 @@ class User(AbstractUser):
 
 
 class Course(models.Model):
+    """
+    This class holds information about Course in database table
+    """
     name = models.CharField(null=False, max_length=100, default='History')
 
     def __str__(self):
@@ -31,6 +38,10 @@ class Course(models.Model):
 
 
 class Submission(models.Model):
+    """
+    This class holds the details about Submission table in the database, storing
+    information including title, course tag, file attached, user, date and likes
+    """
     title = models.CharField(max_length=255)
     tag = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True)
     file = models.FileField(upload_to='', blank=True)
@@ -50,6 +61,11 @@ class Submission(models.Model):
 
 
 class Comment(models.Model):
+    """
+    This class creates holds information about Comment table in the database,
+    storing information including Submission model as foreign key, comment content,
+    date and user
+    """
     post = models.ForeignKey(Submission, related_name="comments", on_delete=models.CASCADE)
     comment_by = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(blank=False, null=False)
